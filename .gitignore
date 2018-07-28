@@ -2,4 +2,7 @@
 .piolibdeps
 .clang_complete
 .gcc-flags.json
-lib
+/lib
+.travis.yml
+.gitignore
+.DS_Store
