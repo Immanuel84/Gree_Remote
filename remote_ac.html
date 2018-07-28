@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<body onload="readstate()">
+
+  <style>
+  .alert {
+    padding: 10px;
+    background-color: gray;
+    color: white;
+    font-family: Arial;
+    font-size: 18px;
+    width: 260px;
+    visibility: hidden;
+    border-radius: 10px;
+  }
+
+  </style>
+  <style>
+  .slidecontainer {
+      width: 100%;
+      font-size: 24px;
+  }
+
+  .slider {
+      -webkit-appearance: none;
+      width: 270px;
+      height: 25px;
+      background: linear-gradient(to right, LightSkyBlue, OrangeRed);
+      outline: none;
+      opacity: 1.0;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+      border-radius: 10px;
+      border: 0.2px;
+
+  }
+
+  .slider:hover {
+      opacity: 1;
+  }
+
+  .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      background: #4CAF50;
+      cursor: pointer;
+      border-radius: 10px;
+  }
+
+  .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      background: #4CAF50;
+      cursor: pointer;
+  }
+  </style>
+  <style>
+    .btn {
+      -webkit-border-radius: 28;
+      -moz-border-radius: 28;
+      border-radius: 28px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 20px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+    }
+
+
+    .btn_red {
+        background: red;
+    }
+    .btn_blue {
+        background: blue;
+    }
+  </style>
+  <style>
+    .box {
+      border-radius: 40px;
+      padding: 0px;
+      //display: inline-block;
+      font-family: Arial;
+      font-size: 18px;
+      vertical-align: middle;
+      width: 300px
+    }
+
+    .box_blue {
+      background: skyblue;
+      border: 1px solid blue;
+
+    }
+
+    .box_green {
+      background: lightgreen;
+      border: 1px solid green;
+    }
+
+    .box_violet {
+      background: palevioletred;
+      border: 1px solid darkviolet;
+    }
+
+    .box_gray {
+      background: LightGray;
+      border: 1px solid LightSlateGray;
+    }
+
+    .remote_box {
+      border-radius: 15px;
+      border: 2px solid blue;
+      background: beige;
+      padding: 10px;
+      display: inline-block;
+      font-family: Arial;
+      font-size: 18px;
+
+    }
+
+    .radio-btn input[type="radio"]  {
+      display: none;
+
+
+    }
+    .radio-btn label {
+      color: #fff;
+      font-family: Arial;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 15px;
+
+
+
+    }
+    .radio-btn_blue input[type="radio"]:checked+label {
+      background-color: #3279ff;
+    }
+    .radio-btn_blue label {
+      background-color: skyblue;
+      border: 0.5px solid #3279ff;
+    }
+
+    .radio-btn_green input[type="radio"]:checked+label {
+      background-color: green;
+    }
+    .radio-btn_green label {
+      background-color: lightgreen;
+      border: 0.5px solid green ;
+    }
+
+    .radio-btn_violet input[type="radio"]:checked+label {
+      background-color: darkviolet;
+    }
+    .radio-btn_violet label {
+      background-color: palevioletred;
+      border: 0.5px solid darkviolet ;
+
+    }
+
+    .checkbox {
+      display: none;
+    }
+
+    .checkbox + label {
+      display: inline-block;
+      background-color: LightGray;
+      color: #fff;
+      padding: 4px;
+      cursor: pointer;
+      font-family: Arial;
+      font-size: 16px;
+      border-radius: 15px;
+      border: 0.5px solid LightSlateGray;
+
+    }
+
+    .checkbox + label:active,
+    .checkbox:checked + label {
+      background-color: LightSlateGray;
+      border: 0.5px solid LightSlateGray;
+    }
+  </style>
+  <head>
+    <title>Gree AC</title>
+  </head>
+
+      <p>
+        <center>
+          <h2>
+            Current Temp: <span id="room_temp"></span>&degC
+            <br/>
+            Current Humidity: <span id="room_humidity"></span>&37
+
+          </h2>
+        </center>
+      </p>
+
+    <center>
+    <div class="remote_box">
+      <p>
+        <span id="showtemp"></span>&degC
+        <br>
+        <input type="range" min="16" max="31" value="21" class="slider" id="temperature">
+      </p>
+        <p>
+          <div class="box box_green">
+            <p>Mode</p>
+            <p>
+            <form id="ac_mode" name="ac_mode" class="radio-btn radio-btn_green">
+              <input type="radio" name="Mode" id="M_0" value="0" checked="checked"/>
+              <label for="M_0">Auto</label>
+              <input type="radio" name="Mode" id="M_4" value="4" />
+              <label for="M_4">Heat</label>
+              <input type="radio" name="Mode" id="M_1" value="1" />
+              <label for="M_1">Cool</label>
+              <input type="radio" name="Mode" id="M_2" value="2" />
+              <label for="M_2">Dry</label>
+              <input type="radio" name="Mode" id="M_3" value="3" />
+              <label for="M_3">Fan</label>
+            </form>
+          </p>
+        </div>
+      </p>
+
+      <p>
+        <div class="box box_violet">
+          <p>Direction</p>
+          <form id="Flap" name="Flap" class="radio-btn radio-btn_violet">
+              <p>
+              <input type="radio" name="flap" id="F_2" value="2" />
+              <label for="F_2">Highest</label>
+              <input type="radio" name="flap" id="F_3" value="3" />
+              <label for="F_3">High</label>
+              <input type="radio" name="flap" id="F_4" value="4" />
+              <label for="F_4">Middle</label>
+              <input type="radio" name="flap" id="F_5" value="5" />
+              <label for="F_5">Low</label>
+              <input type="radio" name="flap" id="F_6" value="6" />
+              <label for="F_6">Lowest</label>
+              </p>
+              <p>
+              <input type="radio" name="flap" value="1" id="F_1" checked="checked"/>
+              <label for="F_1">Auto</label>
+              <input type="radio" name="flap" id="F_7" value="7" />
+              <label for="F_7">Low Auto</label>
+              <input type="radio" name="flap" id="F_11" value="11" />
+              <label for="F_11">High Auto</label>
+              <input type="radio" name="flap" id="F_9" value="9"  />
+              <label for="F_9">Mid Auto</label>
+              </p>
+          </form>
+        </div>
+      </p>
+        <p>
+        <div class="box box_blue">
+          <p>Fan Speed</p>
+          <form id="FanMode" name="FanMode" class="radio-btn radio-btn_blue">
+            <p>
+            <input type="radio" name="fan" value="0" id="S_0" checked="checked"/>
+            <label for="S_0">Auto</label>
+            <input type="radio" name="fan" id="S_1" value="1"/>
+            <label for="S_1">Slow</label>
+            <input type="radio" name="fan" id="S_2" value="2"/>
+            <label for="S_2">Mid</label>
+            <input type="radio" name="fan" id="S_3" value="3"/>
+            <label for="S_3">Max</label>
+            </p>
+          </form>
+        </div>
+        </p>
+
+        <p>
+          <div class="box box_gray">
+            <p>Options</p>
+              <form id="options" name="options">
+                <p>
+                <input type="checkbox" name="light" class="checkbox" id="light"/>
+                <label for="light">Light</label>
+                <input type="checkbox" name="turbo" class="checkbox" id="turbo"/>
+                <label for="turbo">Turbo</label>
+                <input type="checkbox" name="xfan" class="checkbox" id="xfan"/>
+                <label for="xfan">X-Fan</label>
+                <input type="checkbox" name="sleep" class="checkbox" id="sleep"/>
+                <label for="sleep">Sleep</label>
+                </p>
+              </form>
+          </div>
+        </p>
+
+    <div class="alert" id="alert_message">
+      <span id="alert_message_txt">____</span>
+    </div>
+    <br/>
+    <div>
+        <button class="btn btn_blue" onclick="sendCommand()">Send Command</button>
+        <button class="btn btn_red" onclick="turnoff()">Turn Off</button>
+    </div>
+  </div>
+</center>
+    <script>
+      var slider = document.getElementById("temperature");
+      var output = document.getElementById("showtemp");
+      output.innerHTML = slider.value;
+
+      slider.oninput = function() {
+        output.innerHTML = this.value;
+      }
+    </script>
+    <script>
+    function alrt_message(text, timeout, bgcolor, hide) {
+      var alert_msg=document.getElementById("alert_message");
+      var alert_text=document.getElementById("alert_message_txt");
+      alert_text.innerHTML=text;
+      alert_message.style.backgroundColor=bgcolor;
+      alert_msg.style.visibility="visible";
+      if (hide) {
+        window.setTimeout(function() {
+          alert_msg.style.visibility="hidden";
+        }, timeout);
+      }
+    }
+    function sendCommand() {
+        var light = 0;
+        var turbo = 0;
+        var sleep = 0;
+        var xfan = 0;
+        var on = 1;
+        var temperature = document.getElementById("temperature").value;
+        var fanspeed = document.FanMode.fan.value;
+        var acmode =  document.ac_mode.Mode.value;
+        var flap =  document.Flap.flap.value;
+        var flap_automatic = 0;
+        if (flap>6 || flap==1) {
+          flap_automatic = 1;
+          console.log("Flap auto enabled.")
+        }
+
+        var light_checkbox = document.querySelector('#light:checked');
+        if (light_checkbox) {
+          light = 1;
+          console.log("Light On");
+        }
+        var turbo_checkbox = document.querySelector('#turbo:checked');
+        if (turbo_checkbox) {
+          turbo = 1;
+          console.log("Turbo On");
+        }
+        var sleep_checkbox =  document.querySelector('#sleep:checked');
+        if(sleep_checkbox) {
+          sleep = 1;
+          console.log("Sleep on");
+        }
+        var xfan_checkbox =  document.querySelector('#xfan:checked');
+        if(xfan_checkbox) {
+          xfan = 1;
+          console.log("X-Fan on");
+        }
+
+        //command format:[mode, temp, fan_speed,
+        //                flap_auto_flag, flap,
+        //                light, turbo, xfan, sleep, on_off]
+        var command = [acmode, temperature, fanspeed, flap_automatic,flap, light, turbo, xfan, sleep, on];
+        //POST
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/acremote");
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.timeout=4000;
+        xhr.ontimeout = function() {
+          alrt_message("Timed Out.",3000,"red");
+        }
+        xhr.send("command="+command);
+        alrt_message("Sending Command....",4000,"gray",false);
+        xhr.onreadystatechange = function() {
+          if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+            alrt_message("Command Sent.", 3000,"green", true);
+          }
+          else if (xhr.readyState== XMLHttpRequest.DONE && xhr.status!=200){
+            alrt_message("Error.",3000,"red",true);
+
+          }
+        }
+
+
+    }
+    </script>
+    <script>
+    function alrt_message(text, timeout, bgcolor, hide) {
+      var alert_msg=document.getElementById("alert_message");
+      var alert_text=document.getElementById("alert_message_txt");
+      alert_text.innerHTML=text;
+      alert_message.style.backgroundColor=bgcolor;
+      alert_msg.style.visibility="visible";
+      if (hide) {
+        window.setTimeout(function() {
+          alert_msg.style.visibility="hidden";
+        }, timeout);
+      }
+    }
+    function turnoff() {
+        var command=[0,0,0,0,0,0,0,0,0,0];
+        var alert_msg=document.getElementById("alert_message");
+        var alert_text=document.getElementById("alert_message_txt");
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/acremote");
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.timeout=4000;
+        xhr.ontimeout = function() {
+          alrt_message("Timed Out.", 5000,"red", true);
+        }
+        xhr.send("command="+command);
+        alrt_message("Sending Command...", 3000,"gray",false);
+        alert_text.innerHTML="Sending Command...";
+        alert_msg.style.visibility="visible";
+        xhr.onreadystatechange = function() {
+          if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+            alrt_message("Command Sent.", 3000,"green",true);
+          }
+          else if (xhr.readyState== XMLHttpRequest.DONE && xhr.status!=200){
+            alrt_message("Error.", 3000,"red",true);
+          }
+        }
+    }
+    </script>
+    <script>
+    function readstate() {
+      var oldstate=[0,24,1,1,3,1,0,0,0,1];
+      //command format:[mode, temp, fan_speed,
+      //                flap_auto_flag, flap,
+      //                light, turbo, xfan, sleep, on_off]
+      // See forms code.
+      // All radiobuttons in Mode have id=M_XX where X is the value (from IRRemote)
+      // All radiobuttons in Direction/Flap have id=F_XX where XX is the value (from IRRemote)
+      // All radiobuttons in FanSpeed have id=S_XX where XX is the value (from IRRemote)
+      var mode = document.getElementById("M_"+oldstate[0]);
+      var fanspeed=document.getElementById("S_"+oldstate[2]);
+      var direction = document.getElementById("F_"+oldstate[4]);
+      var options=document.options;
+      var temp = document.getElementById("temperature");
+      var output = document.getElementById("showtemp");
+
+      //Set UI to last settings
+      mode.checked=true;
+      fanspeed.checked=true;
+      direction.checked=true;
+      temp.value=oldstate[1];
+      output.innerHTML = oldstate[1];
+      // Set also the "Options"
+      for(i=0;i<options.length;i++) {
+        if(oldstate[5+i]==1) {
+          options[i].checked=true;
+        }
+      }
+    }
+    </script>
+  </body>
+</html>
