@@ -3,6 +3,7 @@ Req libraries:
  IRremoteESP8266
  ESP8266WebServer
  DHTStable
+ 
 Req HW:
   ESP8266
   IR Led (default: S pin is connected to D2/GPIO4)
